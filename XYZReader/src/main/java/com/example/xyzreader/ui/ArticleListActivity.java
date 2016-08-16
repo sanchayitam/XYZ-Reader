@@ -54,7 +54,6 @@ public class ArticleListActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private Snackbar mSnackbar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +62,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        //Added FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,11 +80,8 @@ public class ArticleListActivity extends AppCompatActivity implements
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(getApplicationContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
 
         // Display icon in the toolbar
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
@@ -95,7 +92,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayUseLogoEnabled(true);
 
 
-
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setProgressViewOffset(false, 0, 100);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -103,14 +99,13 @@ public class ArticleListActivity extends AppCompatActivity implements
             @Override
             public void onRefresh() {
                 //Do your task
-                mSwipeRefreshLayout.setRefreshing(false);
-                mSnackbar = Snackbar.make(mSwipeRefreshLayout ,"Uploading XYZ Reader is done",Snackbar.LENGTH_SHORT);
-                mSnackbar.show();
+        mSwipeRefreshLayout.setRefreshing(false);
 
+        //Implemented Snackbar
+        mSnackbar = Snackbar.make(mSwipeRefreshLayout ,"Uploading XYZ Reader is done",Snackbar.LENGTH_SHORT);
+        mSnackbar.show();
             }
         });
-
-
 
         getLoaderManager().initLoader(0, null, this);
 
@@ -118,7 +113,6 @@ public class ArticleListActivity extends AppCompatActivity implements
             refresh();
         }
     }
-
 
     private void refresh() {
         startService(new Intent(this, UpdaterService.class));
@@ -153,9 +147,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         mSwipeRefreshLayout.setRefreshing(mIsRefreshing);
     }
 
-
-
-
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return ArticleLoader.newAllArticlesInstance(this);
@@ -167,7 +158,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         adapter.setHasStableIds(true);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(adapter);
-     //   adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         int columnCount = getResources().getInteger(R.integer.list_column_count);
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
@@ -208,8 +199,6 @@ public class ArticleListActivity extends AppCompatActivity implements
                         if(img !=  null && img instanceof ImageView) {
                             img.setTransitionName("phototransition");
 
-                            //ProgressBarHelper.ShowProgressBar(progressBarHolder);
-
                             Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) mContext, img, img.getTransitionName()).toBundle();
                         //    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(((Activity) mContext), img, "phototransition");
                             startActivity(new Intent(Intent.ACTION_VIEW,
@@ -241,7 +230,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                     ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
             holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
 
-                        }
+        }
 
         @Override
         public int getItemCount() {
